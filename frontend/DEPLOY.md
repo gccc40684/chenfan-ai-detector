@@ -45,10 +45,10 @@ npm run format:check
 
 在 GitHub 仓库 Settings -> Secrets and variables -> Actions 中添加：
 
-| Secret | 说明 |
-|--------|------|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API Token |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Account ID |
+| Secret                    | 说明                      |
+| ------------------------- | ------------------------- |
+| `CLOUDFLARE_API_TOKEN`    | Cloudflare API Token      |
+| `CLOUDFLARE_ACCOUNT_ID`   | Cloudflare Account ID     |
 | `CLOUDFLARE_PROJECT_NAME` | Cloudflare Pages 项目名称 |
 
 ### 获取 Cloudflare API Token
