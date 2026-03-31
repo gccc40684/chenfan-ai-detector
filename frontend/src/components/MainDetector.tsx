@@ -94,7 +94,13 @@ export function MainDetector() {
               onClick={clearText}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style={{ width: '1.25rem', height: '1.25rem' }}
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -129,7 +135,11 @@ export function MainDetector() {
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-4 w-4"
+                  viewBox="0 0 24 24"
+                  style={{ width: '1rem', height: '1rem' }}
+                >
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -170,7 +180,13 @@ export function MainDetector() {
             >
               {result.isAI ? (
                 <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    style={{ width: '1.5rem', height: '1.5rem' }}
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -182,7 +198,13 @@ export function MainDetector() {
                 </>
               ) : (
                 <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    style={{ width: '1.5rem', height: '1.5rem' }}
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
