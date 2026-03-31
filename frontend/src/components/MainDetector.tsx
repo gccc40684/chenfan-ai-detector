@@ -28,7 +28,7 @@ export function MainDetector() {
       const text = await file.text();
       setText(text);
       setResult(null);
-    } catch (error) {
+    } catch {
       alert('文件读取失败');
     }
   }, []);
