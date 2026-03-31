@@ -3,7 +3,7 @@ import { parseFile, getSupportedFileTypes, isSupportedFile } from '../utils/file
 
 interface FileUploadProps {
   onFileParsed: (text: string) => void;
-  maxFileSize?: number; // in MB
+  maxFileSize?: number;
 }
 
 type UploadStatus = 'idle' | 'parsing' | 'success' | 'error';
@@ -87,8 +87,6 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
 
       const file = files[0];
       handleParseFile(file);
-
-      // 重置 input 以便可以重复选择同一文件
       e.target.value = '';
     },
     [handleParseFile]
@@ -98,156 +96,95 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
     fileInputRef.current?.click();
   }, []);
 
-  const getStatusColor = () => {
-    switch (status) {
-      case 'success':
-        return 'border-green-500 bg-green-50';
-      case 'error':
-        return 'border-red-500 bg-red-50';
-      case 'parsing':
-        return 'border-blue-500 bg-blue-50';
-      default:
-        return isDragging
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-300 bg-white hover:border-gray-400 hover:bg-gray-50';
-    }
-  };
+  if (status === 'success') {
+    return (
+      <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 text-emerald-700 rounded-xl text-sm">
+        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+        <span className="flex-1 truncate">{fileName} 上传成功</span>
+        <button
+          onClick={resetState}
+          className="text-emerald-700 hover:text-emerald-800 font-medium"
+        >
+          重新上传
+        </button>
+      </div>
+    );
+  }
 
-  const getStatusIcon = () => {
-    switch (status) {
-      case 'success':
-        return (
-          <svg
-            className="w-8 h-8 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        );
-      case 'error':
-        return (
-          <svg
-            className="w-8 h-8 text-red-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        );
-      case 'parsing':
-        return (
-          <svg
-            className="w-8 h-8 text-blue-500 animate-spin"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-        );
-      default:
-        return (
-          <svg
-            className="w-8 h-8 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
-        );
-    }
-  };
+  if (status === 'error') {
+    return (
+      <div className="flex items-center gap-3 px-4 py-3 bg-rose-50 text-rose-700 rounded-xl text-sm">
+        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span className="flex-1 truncate">{message}</span>
+        <button
+          onClick={resetState}
+          className="text-rose-700 hover:text-rose-800 font-medium"
+        >
+          重试
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full">
-      <div
-        onClick={status === 'idle' ? handleClick : undefined}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        className={`
-          relative border-2 border-dashed rounded-xl p-8
-          transition-all duration-200 cursor-pointer
-          ${getStatusColor()}
-          ${status !== 'idle' ? 'cursor-default' : ''}
-        `}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".txt,.md,.docx,.pdf"
-          onChange={handleFileInputChange}
-          className="hidden"
-        />
+    <div
+      onClick={handleClick}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      className={`
+        relative border border-dashed rounded-xl px-4 py-3
+        transition-all duration-200 cursor-pointer
+        ${isDragging ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-300 bg-white hover:border-slate-400'}
+        ${status === 'parsing' ? 'cursor-default border-indigo-500 bg-indigo-50/50' : ''}
+      `}
+    >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".txt,.md,.docx,.pdf"
+        onChange={handleFileInputChange}
+        className="hidden"
+      />
 
-        <div className="flex flex-col items-center justify-center text-center">
-          <div className="mb-4">{getStatusIcon()}</div>
-
-          {status === 'idle' && (
-            <>
-              <p className="text-lg font-medium text-gray-700 mb-2">拖拽文件到此处，或点击上传</p>
-              <p className="text-sm text-gray-500">支持 {getSupportedFileTypes()} 格式</p>
-              <p className="text-xs text-gray-400 mt-1">单个文件最大 {maxFileSize}MB</p>
-            </>
+      <div className="flex items-center gap-3">
+        {status === 'parsing' ? (
+          <svg className="w-5 h-5 text-indigo-500 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+            />
+          </svg>
+        )}
+        <div className="flex-1 min-w-0">
+          {status === 'parsing' ? (
+            <span className="text-sm text-slate-600">正在解析 {fileName}...</span>
+          ) : (
+            <div className="flex items-center gap-1 text-sm text-slate-500">
+              <span className="font-medium text-indigo-600">点击上传</span>
+              <span>或拖拽文件到此处</span>
+            </div>
           )}
-
-          {status === 'parsing' && (
-            <>
-              <p className="text-lg font-medium text-blue-700 mb-1">{fileName}</p>
-              <p className="text-sm text-blue-600">{message}</p>
-            </>
-          )}
-
-          {status === 'success' && (
-            <>
-              <p className="text-lg font-medium text-green-700 mb-1">{fileName}</p>
-              <p className="text-sm text-green-600 mb-3">{message}</p>
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  resetState();
-                }}
-                className="text-sm text-green-700 underline hover:text-green-800"
-              >
-                上传其他文件
-              </button>
-            </>
-          )}
-
-          {status === 'error' && (
-            <>
-              <p className="text-lg font-medium text-red-700 mb-1">{fileName || '上传失败'}</p>
-              <p className="text-sm text-red-600 mb-3">{message}</p>
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  resetState();
-                }}
-                className="text-sm text-red-700 underline hover:text-red-800"
-              >
-                重试
-              </button>
-            </>
+          {status !== 'parsing' && (
+            <p className="text-xs text-slate-400 mt-0.5">
+              支持 {getSupportedFileTypes()} · 最大 {maxFileSize}MB
+            </p>
           )}
         </div>
       </div>
