@@ -36,6 +36,7 @@ export interface FeatureScores {
   repetition: number;
   sentenceVariation: number;
   patternDensity: number;
+  [key: string]: number;
 }
 
 /**

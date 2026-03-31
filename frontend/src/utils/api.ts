@@ -312,7 +312,7 @@ function generateHeuristicAnalysis(result: HeuristicResult): string {
 function generateHybridAnalysis(
   heuristic: HeuristicResult,
   llm: DetectResponse['data'],
-  fusedScore: number,
+  _fusedScore: number,
   fusedIsAI: boolean
 ): string {
   const parts: string[] = [];
