@@ -45,7 +45,7 @@ export async function parsePdf(file: File): Promise<string> {
             }
 
             const pageText = textContent.items
-              .map((item: any) => item.str || '')
+              .map((item) => ('str' in item ? item.str || '' : ''))
               .join(' ');
 
             if (pageText.trim()) {

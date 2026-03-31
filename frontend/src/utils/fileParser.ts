@@ -39,7 +39,8 @@ const SUPPORTED_EXTENSIONS: string[] = ['.txt', '.md', '.docx', '.pdf'];
  */
 export function isSupportedFile(file: File): boolean {
   const ext = getFileExtension(file.name).toLowerCase();
-  return SUPPORTED_EXTENSIONS.includes(ext);
+  // 检查扩展名或 MIME 类型
+  return SUPPORTED_EXTENSIONS.includes(ext) || file.type in SUPPORTED_MIME_TYPES;
 }
 
 /**
@@ -58,6 +59,19 @@ function getFileExtension(filename: string): string {
  */
 export function getSupportedFileTypes(): string {
   return '.txt, .md, .docx, .pdf';
+}
+
+/**
+ * 格式化文件大小
+ * @param bytes 字节数
+ * @returns 格式化后的字符串
+ */
+export function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 /**

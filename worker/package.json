@@ -1,0 +1,21 @@
+{
+  "name": "ai-detector-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for AI content detection",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["ai", "detection", "cloudflare", "worker"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240320.1",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0",
+    "wrangler": "^3.39.0"
+  }
+}

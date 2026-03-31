@@ -165,7 +165,7 @@ export function detectAIPatterns(text: string): PatternResult {
       startPatterns.set(start, (startPatterns.get(start) || 0) + 1);
     }
   }
-  for (const [pattern, count] of startPatterns) {
+  for (const [, count] of startPatterns) {
     if (count >= 2) {
       totalScore += count * 0.3;
     }

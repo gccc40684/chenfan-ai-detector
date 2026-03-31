@@ -159,17 +159,17 @@ describe('Heuristic Detector Accuracy', () => {
   });
 
   describe('Optimized Weights', () => {
-    // 经过测试优化的权重配置
+    // 经过 Day 5 测试优化的权重配置
     const optimizedConfig: Partial<DetectorConfig> = {
       weights: {
-        burstiness: 0.15,
-        diversity: 0.2,
+        burstiness: 0.05,
+        diversity: 0.3,
         repetition: 0.15,
-        sentenceVariation: 0.1,
-        patternDensity: 0.4,
+        sentenceVariation: 0.25,
+        patternDensity: 0.25,
       },
       thresholds: {
-        aiScore: 0.5,
+        aiScore: 0.52,
         highConfidence: 0.75,
       },
     };

@@ -57,17 +57,17 @@ export interface DetectorConfig {
   };
 }
 
-// 默认配置 - 经过测试数据校准
+// 默认配置 - 经过测试数据校准 (Day 5 调优结果)
 const DEFAULT_CONFIG: DetectorConfig = {
   weights: {
-    burstiness: 0.15,
-    diversity: 0.2,
+    burstiness: 0.05,
+    diversity: 0.3,
     repetition: 0.15,
-    sentenceVariation: 0.1,
-    patternDensity: 0.4, // 增加模式密度权重，这对区分 AI 最有效
+    sentenceVariation: 0.25,
+    patternDensity: 0.25,
   },
   thresholds: {
-    aiScore: 0.5, // 恢复到 0.5
+    aiScore: 0.52,
     highConfidence: 0.75,
   },
 };

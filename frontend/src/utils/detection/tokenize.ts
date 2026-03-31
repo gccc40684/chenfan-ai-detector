@@ -43,7 +43,7 @@ export function tokenize(text: string): Token[] {
 
     tokens.push({
       text: tokenText,
-      type: type === 'whitespace' ? 'other' : type,
+      type: type,
       position,
     });
 
