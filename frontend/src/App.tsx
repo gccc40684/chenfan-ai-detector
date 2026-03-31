@@ -150,8 +150,18 @@ function App() {
               {error && (
                 <div className="bg-rose-50 border border-rose-200 rounded-xl p-4">
                   <div className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-rose-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-5 h-5 text-rose-500 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     <p className="text-rose-700 text-sm">{error}</p>
                   </div>
@@ -180,7 +190,9 @@ function App() {
                         />
                       </div>
                       <div className="flex-1 text-center md:text-left">
-                        <div className={`text-4xl md:text-5xl font-bold mb-2 ${result.isAI ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        <div
+                          className={`text-4xl md:text-5xl font-bold mb-2 ${result.isAI ? 'text-rose-600' : 'text-emerald-600'}`}
+                        >
                           {result.isAI ? 'AI 生成' : '人类撰写'}
                         </div>
                         <p className="text-slate-500">
@@ -222,7 +234,10 @@ function App() {
                         <h4 className="text-sm font-semibold text-slate-700 mb-3">关键证据</h4>
                         <ul className="space-y-2">
                           {result.evidence.map((item, index) => (
-                            <li key={index} className="flex items-start gap-2 text-sm text-slate-600">
+                            <li
+                              key={index}
+                              className="flex items-start gap-2 text-sm text-slate-600"
+                            >
                               <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 flex-shrink-0"></span>
                               {item}
                             </li>
@@ -244,7 +259,12 @@ function App() {
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
                           </svg>
                         </button>
 
@@ -252,38 +272,54 @@ function App() {
                           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
                             {result.heuristicResult && (
                               <div className="bg-blue-50 rounded-xl p-4">
-                                <div className="text-sm font-semibold text-blue-800 mb-2">启发式检测</div>
+                                <div className="text-sm font-semibold text-blue-800 mb-2">
+                                  启发式检测
+                                </div>
                                 <div className="space-y-1 text-sm text-blue-700">
                                   <div className="flex justify-between">
                                     <span>评分</span>
-                                    <span className="font-medium">{Math.round(result.heuristicResult.score * 100)}%</span>
+                                    <span className="font-medium">
+                                      {Math.round(result.heuristicResult.score * 100)}%
+                                    </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span>置信度</span>
-                                    <span className="font-medium">{Math.round(result.heuristicResult.confidence * 100)}%</span>
+                                    <span className="font-medium">
+                                      {Math.round(result.heuristicResult.confidence * 100)}%
+                                    </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span>结果</span>
-                                    <span className="font-medium">{result.heuristicResult.isAI ? 'AI' : '人类'}</span>
+                                    <span className="font-medium">
+                                      {result.heuristicResult.isAI ? 'AI' : '人类'}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
                             )}
                             {result.llmResult && (
                               <div className="bg-violet-50 rounded-xl p-4">
-                                <div className="text-sm font-semibold text-violet-800 mb-2">LLM 分析</div>
+                                <div className="text-sm font-semibold text-violet-800 mb-2">
+                                  LLM 分析
+                                </div>
                                 <div className="space-y-1 text-sm text-violet-700">
                                   <div className="flex justify-between">
                                     <span>评分</span>
-                                    <span className="font-medium">{Math.round(result.llmResult.score * 100)}%</span>
+                                    <span className="font-medium">
+                                      {Math.round(result.llmResult.score * 100)}%
+                                    </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span>置信度</span>
-                                    <span className="font-medium">{Math.round(result.llmResult.confidence * 100)}%</span>
+                                    <span className="font-medium">
+                                      {Math.round(result.llmResult.confidence * 100)}%
+                                    </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span>结果</span>
-                                    <span className="font-medium">{result.llmResult.isAI ? 'AI' : '人类'}</span>
+                                    <span className="font-medium">
+                                      {result.llmResult.isAI ? 'AI' : '人类'}
+                                    </span>
                                   </div>
                                 </div>
                               </div>

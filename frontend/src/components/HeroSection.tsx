@@ -19,9 +19,7 @@ export function HeroSection({ title, subtitle }: HeroSectionProps) {
       <h1 className="text-4xl md:text-5xl font-semibold text-slate-900 tracking-tight mb-4">
         {title}
       </h1>
-      <p className="text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-        {subtitle}
-      </p>
+      <p className="text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">{subtitle}</p>
     </div>
   );
 }

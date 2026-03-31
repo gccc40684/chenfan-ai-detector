@@ -99,7 +99,12 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
   if (status === 'success') {
     return (
       <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 text-emerald-700 rounded-xl text-sm">
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-5 h-5 flex-shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
         <span className="flex-1 truncate">{fileName} 上传成功</span>
@@ -116,14 +121,21 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
   if (status === 'error') {
     return (
       <div className="flex items-center gap-3 px-4 py-3 bg-rose-50 text-rose-700 rounded-xl text-sm">
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          className="w-5 h-5 flex-shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
         <span className="flex-1 truncate">{message}</span>
-        <button
-          onClick={resetState}
-          className="text-rose-700 hover:text-rose-800 font-medium"
-        >
+        <button onClick={resetState} className="text-rose-700 hover:text-rose-800 font-medium">
           重试
         </button>
       </div>
@@ -154,8 +166,19 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
 
       <div className="flex items-center gap-3">
         {status === 'parsing' ? (
-          <svg className="w-5 h-5 text-indigo-500 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <svg
+            className="w-5 h-5 text-indigo-500 animate-spin flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
             <path
               className="opacity-75"
               fill="currentColor"
@@ -163,7 +186,12 @@ export function FileUpload({ onFileParsed, maxFileSize = 10 }: FileUploadProps) 
             />
           </svg>
         ) : (
-          <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-5 h-5 text-slate-400 flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

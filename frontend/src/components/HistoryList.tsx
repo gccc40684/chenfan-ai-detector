@@ -62,8 +62,18 @@ export function HistoryList({
 
       {history.length === 0 ? (
         <div className="p-8 text-center">
-          <svg className="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-10 h-10 text-slate-300 mx-auto mb-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <p className="text-sm text-slate-500">暂无历史记录</p>
         </div>
@@ -80,8 +90,12 @@ export function HistoryList({
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${getResultBg(item.result.isAI).replace('bg-', 'bg-')}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${item.result.isAI ? 'bg-rose-500' : 'bg-emerald-500'}`} />
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${getResultBg(item.result.isAI).replace('bg-', 'bg-')}`}
+                  >
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full ${item.result.isAI ? 'bg-rose-500' : 'bg-emerald-500'}`}
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-700 truncate">{previewText(item.text)}</p>
@@ -101,8 +115,18 @@ export function HistoryList({
                       className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-500 rounded transition-all"
                       title="删除"
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
                   </div>
