@@ -243,7 +243,7 @@ function detectRepetitiveStructure(sentences: string[]): number {
     patternCounts.set(simplified, (patternCounts.get(simplified) || 0) + 1);
   }
 
-  for (const [_, count] of patternCounts) {
+  for (const [, count] of patternCounts) {
     if (count >= 2) {
       repetitiveCount += count - 1; // 重复次数
     }

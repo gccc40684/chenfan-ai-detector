@@ -57,11 +57,8 @@ function generateId(): string {
  * 历史记录 Hook
  */
 export function useHistory() {
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // 从 localStorage 加载历史记录
-  useEffect(() => {
+  const [history, setHistory] = useState<HistoryItem[]>(() => {
+    // 从 localStorage 加载初始值
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -76,12 +73,17 @@ export function useHistory() {
             item.result &&
             typeof item.result.isAI === 'boolean'
         );
-        setHistory(validItems);
+        return validItems;
       }
     } catch (error) {
       console.error('Failed to load history from localStorage:', error);
-      setHistory([]);
     }
+    return [];
+  });
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // 标记已加载
+  useEffect(() => {
     setIsLoaded(true);
   }, []);
 
@@ -92,16 +94,6 @@ export function useHistory() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
       } catch (error) {
         console.error('Failed to save history to localStorage:', error);
-        // 如果存储失败（如空间不足），尝试只保留最近的 10 条
-        if (history.length > 10) {
-          const reduced = history.slice(0, 10);
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
-            setHistory(reduced);
-          } catch (e) {
-            console.error('Failed to save even reduced history:', e);
-          }
-        }
       }
     }
   }, [history, isLoaded]);

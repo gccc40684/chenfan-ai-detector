@@ -58,5 +58,5 @@ function analyze(label: string, text: string) {
   });
 }
 
-humanFailures.forEach((item, i) => analyze(`Human Failure ${item.id}`, item.text));
-aiBorderline.forEach((item, i) => analyze(`AI Borderline ${item.id}`, item.text));
+humanFailures.forEach((item) => analyze(`Human Failure ${item.id}`, item.text));
+aiBorderline.forEach((item) => analyze(`AI Borderline ${item.id}`, item.text));
