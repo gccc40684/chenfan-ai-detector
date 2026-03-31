@@ -122,11 +122,19 @@ function calculateMetrics(
   const f1 = precision + recall > 0 ? (2 * precision * recall) / (precision + recall) : 0;
 
   const failedHuman = humanResults
-    .map((r, i) => ({ index: i, text: humanTexts[i].slice(0, 60).replace(/\s+/g, ' '), score: r.score }))
+    .map((r, i) => ({
+      index: i,
+      text: humanTexts[i].slice(0, 60).replace(/\s+/g, ' '),
+      score: r.score,
+    }))
     .filter(r => r.score >= 0.5);
 
   const failedAI = aiResults
-    .map((r, i) => ({ index: i, text: aiTexts[i].slice(0, 60).replace(/\s+/g, ' '), score: r.score }))
+    .map((r, i) => ({
+      index: i,
+      text: aiTexts[i].slice(0, 60).replace(/\s+/g, ' '),
+      score: r.score,
+    }))
     .filter(r => r.score < 0.5);
 
   return {
@@ -160,8 +168,18 @@ function evaluateConfig(config: Partial<DetectorConfig>): TuningResult {
   const humanEnglishResults = humanTextsEnglish.map(t => detectAI(t, config));
   const aiEnglishResults = aiTextsEnglish.map(t => detectAI(t, config));
 
-  const chinese = calculateMetrics(humanChineseResults, aiChineseResults, humanTextsChinese, aiTextsChinese);
-  const english = calculateMetrics(humanEnglishResults, aiEnglishResults, humanTextsEnglish, aiTextsEnglish);
+  const chinese = calculateMetrics(
+    humanChineseResults,
+    aiChineseResults,
+    humanTextsChinese,
+    aiTextsChinese
+  );
+  const english = calculateMetrics(
+    humanEnglishResults,
+    aiEnglishResults,
+    humanTextsEnglish,
+    aiTextsEnglish
+  );
 
   const allHumanResults = [...humanChineseResults, ...humanEnglishResults];
   const allAIResults = [...aiChineseResults, ...aiEnglishResults];
@@ -211,7 +229,9 @@ function generateWeightGrid(): Array<Partial<DetectorConfig>> {
   return weights;
 }
 
-function* generateThresholdVariations(base: Partial<DetectorConfig>): Generator<Partial<DetectorConfig>> {
+function* generateThresholdVariations(
+  base: Partial<DetectorConfig>
+): Generator<Partial<DetectorConfig>> {
   const thresholds = [0.45, 0.48, 0.5, 0.52, 0.55];
   for (const t of thresholds) {
     yield {
@@ -250,11 +270,15 @@ function printMetrics(m: AccuracyMetrics) {
   console.log(`  AI Scores        : [${m.aiScores.map(s => s.toFixed(3)).join(', ')}]`);
   if (m.failedHuman.length) {
     console.log(`  Failed Human  :`);
-    m.failedHuman.forEach(f => console.log(`    [${f.index}] score=${f.score.toFixed(3)} text="${f.text}"`));
+    m.failedHuman.forEach(f =>
+      console.log(`    [${f.index}] score=${f.score.toFixed(3)} text="${f.text}"`)
+    );
   }
   if (m.failedAI.length) {
     console.log(`  Failed AI     :`);
-    m.failedAI.forEach(f => console.log(`    [${f.index}] score=${f.score.toFixed(3)} text="${f.text}"`));
+    m.failedAI.forEach(f =>
+      console.log(`    [${f.index}] score=${f.score.toFixed(3)} text="${f.text}"`)
+    );
   }
 }
 
@@ -286,7 +310,8 @@ function main() {
       if (
         !bestResult ||
         result.minLanguageAccuracy > bestResult.minLanguageAccuracy ||
-        (result.minLanguageAccuracy === bestResult.minLanguageAccuracy && result.combinedAccuracy > bestResult.combinedAccuracy)
+        (result.minLanguageAccuracy === bestResult.minLanguageAccuracy &&
+          result.combinedAccuracy > bestResult.combinedAccuracy)
       ) {
         bestResult = result;
       }

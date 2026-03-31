@@ -104,7 +104,7 @@ export function HistoryList({
         <div className="flex items-center gap-2">
           {history.length > 0 && (
             <button
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onClear();
               }}
@@ -122,12 +122,7 @@ export function HistoryList({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
@@ -154,20 +149,14 @@ export function HistoryList({
                 <div className="flex items-start justify-between gap-3">
                   {/* 左侧：预览文本 */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-700 truncate">
-                      {previewText(item.text)}
-                    </p>
+                    <p className="text-sm text-gray-700 truncate">{previewText(item.text)}</p>
                     <div className="flex items-center gap-2 mt-2">
                       {/* 结果标签 */}
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-medium ${result.color}`}
-                      >
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${result.color}`}>
                         {result.text}
                       </span>
                       {/* 方法标签 */}
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-medium ${method.color}`}
-                      >
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${method.color}`}>
                         {method.text}
                       </span>
                       {/* 置信度 */}
@@ -179,11 +168,9 @@ export function HistoryList({
 
                   {/* 右侧：时间和删除按钮 */}
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-xs text-gray-400">
-                      {formatTime(item.createdAt)}
-                    </span>
+                    <span className="text-xs text-gray-400">{formatTime(item.createdAt)}</span>
                     <button
-                      onClick={(e) => handleDelete(e, item.id)}
+                      onClick={e => handleDelete(e, item.id)}
                       className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-all"
                       title="删除"
                     >
@@ -232,9 +219,7 @@ export function HistoryList({
                 );
               })()}
             </div>
-            <span className="text-xs text-gray-400">
-              {formatTime(history[0].createdAt)}
-            </span>
+            <span className="text-xs text-gray-400">{formatTime(history[0].createdAt)}</span>
           </div>
         </div>
       )}

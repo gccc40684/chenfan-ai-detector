@@ -13,7 +13,7 @@ export async function parsePdf(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = async (e) => {
+    reader.onload = async e => {
       try {
         const arrayBuffer = e.target?.result as ArrayBuffer;
         if (!arrayBuffer) {
@@ -45,7 +45,7 @@ export async function parsePdf(file: File): Promise<string> {
             }
 
             const pageText = textContent.items
-              .map((item) => ('str' in item ? item.str || '' : ''))
+              .map(item => ('str' in item ? item.str || '' : ''))
               .join(' ');
 
             if (pageText.trim()) {
@@ -69,12 +69,7 @@ export async function parsePdf(file: File): Promise<string> {
         resolve(fullText.trim());
       } catch (error) {
         console.error('PDF 解析错误:', error);
-        reject(
-          new Error(
-            'PDF 解析失败：' +
-              (error instanceof Error ? error.message : '未知错误')
-          )
-        );
+        reject(new Error('PDF 解析失败：' + (error instanceof Error ? error.message : '未知错误')));
       }
     };
 

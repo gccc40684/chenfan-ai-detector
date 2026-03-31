@@ -118,11 +118,10 @@ export function useHistory() {
         createdAt: new Date().toISOString(),
       };
 
-      setHistory((prev) => {
+      setHistory(prev => {
         // 去重：如果文本相同且结果相同，先移除旧记录
         const filtered = prev.filter(
-          (item) =>
-            !(item.text === newItem.text && item.result.isAI === newItem.result.isAI)
+          item => !(item.text === newItem.text && item.result.isAI === newItem.result.isAI)
         );
         // 添加到开头，限制数量
         return [newItem, ...filtered].slice(0, MAX_HISTORY_ITEMS);
@@ -137,7 +136,7 @@ export function useHistory() {
    * 删除单条历史记录
    */
   const deleteHistoryItem = useCallback((id: string) => {
-    setHistory((prev) => prev.filter((item) => item.id !== id));
+    setHistory(prev => prev.filter(item => item.id !== id));
   }, []);
 
   /**
@@ -158,7 +157,7 @@ export function useHistory() {
    */
   const getHistoryItem = useCallback(
     (id: string): HistoryItem | undefined => {
-      return history.find((item) => item.id === id);
+      return history.find(item => item.id === id);
     },
     [history]
   );
@@ -192,9 +191,9 @@ export function useHistory() {
    */
   const getStats = useCallback(() => {
     const total = history.length;
-    const aiCount = history.filter((item) => item.result.isAI).length;
+    const aiCount = history.filter(item => item.result.isAI).length;
     const humanCount = total - aiCount;
-    const hybridCount = history.filter((item) => item.method === 'hybrid').length;
+    const hybridCount = history.filter(item => item.method === 'hybrid').length;
 
     return {
       total,

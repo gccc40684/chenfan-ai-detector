@@ -194,12 +194,20 @@ function printReport(report: AccuracyReport): void {
 
   console.log('📈 分类统计');
   console.log('-'.repeat(80));
-  console.log(`人工文本: ${report.humanSamples.correct}/${report.humanSamples.total} (${(report.humanSamples.accuracy * 100).toFixed(2)}%)`);
-  console.log(`AI 文本:  ${report.aiSamples.correct}/${report.aiSamples.total} (${(report.aiSamples.accuracy * 100).toFixed(2)}%)`);
+  console.log(
+    `人工文本: ${report.humanSamples.correct}/${report.humanSamples.total} (${(report.humanSamples.accuracy * 100).toFixed(2)}%)`
+  );
+  console.log(
+    `AI 文本:  ${report.aiSamples.correct}/${report.aiSamples.total} (${(report.aiSamples.accuracy * 100).toFixed(2)}%)`
+  );
   console.log('');
 
-  console.log(`中文样本: ${report.chineseSamples.correct}/${report.chineseSamples.total} (${(report.chineseSamples.accuracy * 100).toFixed(2)}%)`);
-  console.log(`英文样本: ${report.englishSamples.correct}/${report.englishSamples.total} (${(report.englishSamples.accuracy * 100).toFixed(2)}%)`);
+  console.log(
+    `中文样本: ${report.chineseSamples.correct}/${report.chineseSamples.total} (${(report.chineseSamples.accuracy * 100).toFixed(2)}%)`
+  );
+  console.log(
+    `英文样本: ${report.englishSamples.correct}/${report.englishSamples.total} (${(report.englishSamples.accuracy * 100).toFixed(2)}%)`
+  );
   console.log('');
 
   // 目标检查
@@ -207,9 +215,13 @@ function printReport(report: AccuracyReport): void {
   console.log('🎯 目标检查');
   console.log('-'.repeat(80));
   if (report.accuracy >= targetAccuracy) {
-    console.log(`✅ 综合准确率达标！目标: ${(targetAccuracy * 100).toFixed(0)}%, 实际: ${(report.accuracy * 100).toFixed(2)}%`);
+    console.log(
+      `✅ 综合准确率达标！目标: ${(targetAccuracy * 100).toFixed(0)}%, 实际: ${(report.accuracy * 100).toFixed(2)}%`
+    );
   } else {
-    console.log(`❌ 综合准确率未达标。目标: ${(targetAccuracy * 100).toFixed(0)}%, 实际: ${(report.accuracy * 100).toFixed(2)}%`);
+    console.log(
+      `❌ 综合准确率未达标。目标: ${(targetAccuracy * 100).toFixed(0)}%, 实际: ${(report.accuracy * 100).toFixed(2)}%`
+    );
   }
 
   // 打印错误样本
@@ -220,7 +232,9 @@ function printReport(report: AccuracyReport): void {
     errors.forEach(({ sample, result }) => {
       console.log(`\n${sample.label}:`);
       console.log(`  预期: ${sample.expected}, 预测: ${result.isAI ? 'ai' : 'human'}`);
-      console.log(`  分数: ${(result.score * 100).toFixed(1)}%, 置信度: ${(result.confidence * 100).toFixed(1)}%`);
+      console.log(
+        `  分数: ${(result.score * 100).toFixed(1)}%, 置信度: ${(result.confidence * 100).toFixed(1)}%`
+      );
       console.log(`  特征:`, result.features);
     });
   }
@@ -251,10 +265,18 @@ function exportReportToMarkdown(report: AccuracyReport): string {
   lines.push('');
   lines.push('| 类别 | 正确/总数 | 准确率 |');
   lines.push('|------|-----------|--------|');
-  lines.push(`| 人工文本 | ${report.humanSamples.correct}/${report.humanSamples.total} | ${(report.humanSamples.accuracy * 100).toFixed(2)}% |`);
-  lines.push(`| AI 文本 | ${report.aiSamples.correct}/${report.aiSamples.total} | ${(report.aiSamples.accuracy * 100).toFixed(2)}% |`);
-  lines.push(`| 中文样本 | ${report.chineseSamples.correct}/${report.chineseSamples.total} | ${(report.chineseSamples.accuracy * 100).toFixed(2)}% |`);
-  lines.push(`| 英文样本 | ${report.englishSamples.correct}/${report.englishSamples.total} | ${(report.englishSamples.accuracy * 100).toFixed(2)}% |`);
+  lines.push(
+    `| 人工文本 | ${report.humanSamples.correct}/${report.humanSamples.total} | ${(report.humanSamples.accuracy * 100).toFixed(2)}% |`
+  );
+  lines.push(
+    `| AI 文本 | ${report.aiSamples.correct}/${report.aiSamples.total} | ${(report.aiSamples.accuracy * 100).toFixed(2)}% |`
+  );
+  lines.push(
+    `| 中文样本 | ${report.chineseSamples.correct}/${report.chineseSamples.total} | ${(report.chineseSamples.accuracy * 100).toFixed(2)}% |`
+  );
+  lines.push(
+    `| 英文样本 | ${report.englishSamples.correct}/${report.englishSamples.total} | ${(report.englishSamples.accuracy * 100).toFixed(2)}% |`
+  );
   lines.push('');
 
   const errors = report.details.filter(r => !r.correct);
@@ -264,7 +286,9 @@ function exportReportToMarkdown(report: AccuracyReport): string {
     lines.push('| 样本 | 预期 | 预测 | 分数 | 置信度 |');
     lines.push('|------|------|------|------|--------|');
     errors.forEach(({ sample, result }) => {
-      lines.push(`| ${sample.label} | ${sample.expected} | ${result.isAI ? 'ai' : 'human'} | ${(result.score * 100).toFixed(1)}% | ${(result.confidence * 100).toFixed(1)}% |`);
+      lines.push(
+        `| ${sample.label} | ${sample.expected} | ${result.isAI ? 'ai' : 'human'} | ${(result.score * 100).toFixed(1)}% | ${(result.confidence * 100).toFixed(1)}% |`
+      );
     });
     lines.push('');
   }
@@ -275,7 +299,9 @@ function exportReportToMarkdown(report: AccuracyReport): string {
   lines.push('|------|------|------|------|------|--------|');
   report.details.forEach(({ sample, result, correct }) => {
     const status = correct ? '✅' : '❌';
-    lines.push(`| ${sample.label} | ${sample.expected} | ${result.isAI ? 'ai' : 'human'} | ${status} | ${(result.score * 100).toFixed(1)}% | ${(result.confidence * 100).toFixed(1)}% |`);
+    lines.push(
+      `| ${sample.label} | ${sample.expected} | ${result.isAI ? 'ai' : 'human'} | ${status} | ${(result.score * 100).toFixed(1)}% | ${(result.confidence * 100).toFixed(1)}% |`
+    );
   });
   lines.push('');
 

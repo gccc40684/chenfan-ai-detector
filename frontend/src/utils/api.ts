@@ -83,11 +83,7 @@ async function fetchWithTimeout(
  * Check API health status
  */
 export async function checkHealth(timeoutMs = 5000): Promise<HealthResponse> {
-  const response = await fetchWithTimeout(
-    `${API_BASE_URL}/health`,
-    { method: 'GET' },
-    timeoutMs
-  );
+  const response = await fetchWithTimeout(`${API_BASE_URL}/health`, { method: 'GET' }, timeoutMs);
 
   if (!response.ok) {
     throw new Error(`Health check failed: ${response.status}`);
@@ -151,11 +147,7 @@ export async function detectHybrid(
     useLLM?: boolean; // 是否使用 LLM，默认 true
   } = {}
 ): Promise<HybridDetectResult> {
-  const {
-    grayZoneThreshold = 0.2,
-    highConfidenceThreshold = 0.75,
-    useLLM = true,
-  } = options;
+  const { grayZoneThreshold = 0.2, highConfidenceThreshold = 0.75, useLLM = true } = options;
 
   // 第一步：启发式检测（本地，快速）
   const heuristicResult = heuristicDetectFn(text);
@@ -337,7 +329,9 @@ function generateHybridAnalysis(
   if (heuristicSaysAI === llmSaysAI) {
     parts.push(`启发式检测与 LLM 分析结果一致（${fusedIsAI ? 'AI生成' : '人类撰写'}）。`);
   } else {
-    parts.push(`启发式检测与 LLM 分析结果存在分歧，综合判断为${fusedIsAI ? 'AI生成' : '人类撰写'}。`);
+    parts.push(
+      `启发式检测与 LLM 分析结果存在分歧，综合判断为${fusedIsAI ? 'AI生成' : '人类撰写'}。`
+    );
   }
 
   return parts.join('\n');

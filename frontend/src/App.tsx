@@ -21,14 +21,8 @@ function App() {
   const [loadingStage, setLoadingStage] = useState<string>('');
 
   // 历史记录
-  const {
-    history,
-    addHistory,
-    deleteHistoryItem,
-    clearHistory,
-    formatTime,
-    getStats,
-  } = useHistory();
+  const { history, addHistory, deleteHistoryItem, clearHistory, formatTime, getStats } =
+    useHistory();
 
   const handleFileParsed = (parsedText: string) => {
     textInputRef.current?.setText(parsedText);
@@ -45,7 +39,7 @@ function App() {
       // 使用混合检测策略
       const hybridResult = await detectHybrid(
         text,
-        (t) => {
+        t => {
           const localResult = detectAI(t);
           setLoadingStage('启发式检测完成，正在分析...');
           return {
@@ -226,9 +220,7 @@ function App() {
                   <div className="flex items-center gap-4 mb-6">
                     <div
                       className={`px-6 py-3 rounded-full font-bold text-lg ${
-                        result.isAI
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-green-100 text-green-700'
+                        result.isAI ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
                       }`}
                     >
                       {result.isAI ? '🤖 AI 生成' : '👤 人类撰写'}
@@ -250,8 +242,8 @@ function App() {
                           result.score > 0.7
                             ? 'bg-red-500'
                             : result.score > 0.4
-                            ? 'bg-yellow-500'
-                            : 'bg-green-500'
+                              ? 'bg-yellow-500'
+                              : 'bg-green-500'
                         }`}
                         style={{ width: `${result.score * 100}%` }}
                       ></div>
@@ -293,7 +285,11 @@ function App() {
                       <div className="text-sm font-medium text-gray-700 mb-2">关键证据</div>
                       <ul className="list-disc list-inside text-gray-700 space-y-1">
                         {result.evidence.map((item, index) => (
-                          <li key={index} className="animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+                          <li
+                            key={index}
+                            className="animate-slide-up"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
                             {item}
                           </li>
                         ))}

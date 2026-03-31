@@ -73,8 +73,16 @@ const testSamples = {
 function mockHeuristicDetect(text: string): HeuristicResult {
   // 简单的启发式模拟：检查 AI 特征词密度
   const aiPatterns = [
-    '首先', '其次', '此外', '综上所述', '总之',
-    '第一', '第二', '第三', '随着', '不断',
+    '首先',
+    '其次',
+    '此外',
+    '综上所述',
+    '总之',
+    '第一',
+    '第二',
+    '第三',
+    '随着',
+    '不断',
   ];
 
   let patternCount = 0;

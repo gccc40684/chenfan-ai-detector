@@ -57,19 +57,13 @@ export class ErrorBoundary extends Component<Props, State> {
               </svg>
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              出错了
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">出错了</h2>
 
-            <p className="text-gray-600 mb-6">
-              应用遇到了意外错误，请尝试刷新页面。
-            </p>
+            <p className="text-gray-600 mb-6">应用遇到了意外错误，请尝试刷新页面。</p>
 
             {this.state.error && (
               <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left overflow-auto">
-                <p className="text-sm text-red-600 font-mono">
-                  {this.state.error.message}
-                </p>
+                <p className="text-sm text-red-600 font-mono">{this.state.error.message}</p>
               </div>
             )}
 
