@@ -166,7 +166,7 @@ function restoreAbbreviations(text: string): string {
  */
 export function getSentenceLength(sentence: string): number {
   // 移除标点符号后计算有效字符数
-  const cleanSentence = sentence.replace(/[\s\n\r。！？；.!?,，、""''（）()【】\[\]]/g, '');
+  const cleanSentence = sentence.replace(/[\s\n\r。！？；.!?,，、""''（）()【()[]]/g, '');
   return cleanSentence.length;
 }
 

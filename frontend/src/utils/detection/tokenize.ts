@@ -28,7 +28,7 @@ export function tokenize(text: string): Token[] {
 
   // 使用正则表达式匹配不同类型的 token
   const regex =
-    /[\u4e00-\u9fa5]|[a-zA-Z]+(?:[''-][a-zA-Z]+)*|\d+(?:\.\d+)?|[\s\n\r]+|[。！？；.!?,:，、""''（）()【】\[\]]|./g;
+    /[\u4e00-\u9fa5]|[a-zA-Z]+(?:[''-][a-zA-Z]+)*|\d+(?:\.\d+)?|[\s\n\r]+|[。！？；.!?,,:，、""''（）()【()[]]|./g;
 
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -78,7 +78,7 @@ function getTokenType(text: string): Token['type'] | 'whitespace' {
   }
 
   // 标点符号
-  if (/^[。！？；.!?,:，、""''（）()【】\[\]]$/.test(text)) {
+  if (/^[。！？；.!?,,,，、""''（）()【()[]]$/.test(text)) {
     return 'punctuation';
   }
 
