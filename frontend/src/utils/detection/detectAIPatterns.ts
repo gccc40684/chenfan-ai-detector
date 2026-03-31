@@ -1,130 +1,120 @@
 /**
- * AI 模式检测模块
- * 检测文本中常见的 AI 生成特征
- * 包括过渡词、句式模式、结构特征等
+ * AI 文本模式检测
+ * 检测常见的 AI 生成文本特征
  */
 
 import { splitSentences } from './splitSentences';
+import { getAllWords, getWordFrequency } from './tokenize';
 
 /**
- * AI 常见过渡词和短语（中文）
- */
-const CHINESE_PATTERNS = {
-  // 列举型过渡词
-  enumeration: ['首先', '其次', '再次', '最后', '第一', '第二', '第三', '第四', '第五'],
-
-  // 总结型过渡词
-  summary: ['综上所述', '总而言之', '总的来说', '总之', '归纳起来', '总体来看'],
-
-  // 强调型过渡词
-  emphasis: ['值得注意的是', '需要指出的是', '特别重要的是', '关键在于', '尤其是'],
-
-  // 转折型过渡词
-  contrast: ['然而', '但是', '不过', '尽管如此', '虽然', '尽管'],
-
-  // 因果型过渡词
-  causation: ['因此', '所以', '由此可见', '基于此', '由此可知', '导致', '使得'],
-
-  // 解释型过渡词
-  explanation: ['换句话说', '也就是说', '具体来说', '具体而言', '简而言之'],
-
-  // 递进型过渡词
-  progression: ['不仅如此', '更重要的是', '进一步说', '此外', '另外', '而且'],
-
-  // 视角型短语
-  perspective: ['从这个角度来看', '基于以上分析', '从某种程度上说', '在一定程度上'],
-
-  // 判断型短语
-  judgment: ['不难发现', '显而易见', ' Clearly', '显然', '毫无疑问'],
-
-  // 程度修饰
-  degree: ['一定程度上', '某种程度上', '相当', '比较', '相对'],
-};
-
-/**
- * AI 常见过渡词和短语（英文）
- */
-const ENGLISH_PATTERNS = {
-  enumeration: ['firstly', 'secondly', 'thirdly', 'finally', 'first', 'second', 'third'],
-
-  summary: ['in conclusion', 'to summarize', 'in summary', 'to sum up', 'overall', 'all in all'],
-
-  emphasis: ['it is important to note', 'it should be noted', 'it is worth noting', 'notably'],
-
-  contrast: ['however', 'nevertheless', 'nonetheless', 'on the other hand', 'conversely'],
-
-  causation: ['therefore', 'thus', 'consequently', 'as a result', 'hence', 'accordingly'],
-
-  explanation: ['in other words', 'that is to say', 'to put it another way', 'specifically'],
-
-  progression: ['furthermore', 'moreover', 'additionally', 'in addition', 'besides'],
-
-  perspective: ['from this perspective', 'from this angle', 'in this context'],
-
-  judgment: ['undoubtedly', 'obviously', 'clearly', 'evidently', 'apparently', 'certainly'],
-
-  degree: ['to some extent', 'to a certain degree', 'relatively', 'fairly', 'quite'],
-};
-
-/**
- * AI 句式模式（正则表达式）
- */
-const SENTENCE_PATTERNS = [
-  // 中文句式
-  /不仅[^，]+而且/g, // 不仅...而且
-  /虽然[^，]+但是/g, // 虽然...但是
-  /因为[^，]+所以/g, // 因为...所以
-  /如果[^，]+那么/g, // 如果...那么
-  /既[^，]+又/g, // 既...又
-  /一方面[^，]+另一方面/g, // 一方面...另一方面
-  /首先[^，]+然后/g, // 首先...然后
-  /从[^，]+来看/g, // 从...来看
-  /在[^，]+方面/g, // 在...方面
-  /通过[^，]+可以/g, // 通过...可以
-  /有助于[^，]+/g, // 有助于...
-  /旨在[^，]+/g, // 旨在...
-  /旨在[^。]+/g, // 旨在...
-  /体现了[^，]+/g, // 体现了...
-  /反映了[^，]+/g, // 反映了...
-  /说明了[^，]+/g, // 说明了...
-
-  // 英文句式
-  /not only[^,]+but also/gi,
-  /although[^,]+however/gi,
-  /because[^,]+therefore/gi,
-  /if[^,]+then/gi,
-  /both[^,]+and/gi,
-  /on the one hand[^,]+on the other hand/gi,
-  /first[^,]+then/gi,
-  /from[^,]+perspective/gi,
-  /in terms of[^,]+/gi,
-  /helps to[^,]+/gi,
-  /aims to[^,]+/gi,
-  /reflects[^,]+/gi,
-  /demonstrates[^,]+/gi,
-  /indicates[^,]+/gi,
-];
-
-/**
- * 模式检测结果
- */
-export interface PatternResult {
-  totalScore: number; // 0-100
-  chineseMatches: PatternMatch[];
-  englishMatches: PatternMatch[];
-  sentenceMatches: PatternMatch[];
-  density: number; // 每句平均匹配数
-}
-
-/**
- * 单个模式匹配结果
+ * 模式匹配
  */
 export interface PatternMatch {
   pattern: string;
-  category: string;
   count: number;
-  positions: number[];
+  position: number[];
 }
+
+/**
+ * AI 模式检测结果
+ */
+export interface PatternResult {
+  density: number;
+  patterns: string[];
+  score: number;
+}
+
+// AI 常见模式 - 按类别分组
+const AI_PATTERNS = {
+  // 中文 AI 常用开头
+  chineseOpeners: [
+    '首先，',
+    '其次，',
+    '最后，',
+    '总之，',
+    '综上所述，',
+    '因此，',
+    '所以，',
+    '此外，',
+    '另外，',
+    '同时，',
+    '然而，',
+    '但是，',
+    '尽管',
+    '虽然',
+    '值得注意的是，',
+    '需要指出的是，',
+    '不可否认的是，',
+    '换句话说，',
+  ],
+  // 英文 AI 常用开头
+  englishOpeners: [
+    'Firstly,',
+    'Secondly,',
+    'Finally,',
+    'In conclusion,',
+    'Therefore,',
+    'However,',
+    'Moreover,',
+    'Furthermore,',
+    'Additionally,',
+    'Nevertheless,',
+    'In summary,',
+    'To summarize,',
+    'It is important to note that',
+    'It should be noted that',
+    'In other words,',
+    'As a result,',
+  ],
+  // 中文 AI 常用词汇
+  chineseFormal: [
+    '具有重要意义',
+    '发挥着重要作用',
+    '不容忽视',
+    '显而易见',
+    '至关重要',
+    '不可或缺',
+    '必不可少',
+    '显而易见',
+    '有目共睹',
+    '毫无疑问',
+    '不可否认',
+    '显而易见',
+    '值得注意的是',
+    '需要指出的是',
+    '必须承认',
+  ],
+  // 英文 AI 常用词汇
+  englishFormal: [
+    'significant',
+    'important',
+    'crucial',
+    'essential',
+    'vital',
+    'undoubtedly',
+    'certainly',
+    'obviously',
+    'clearly',
+    'it is evident that',
+    'it is clear that',
+    'it is obvious that',
+    'plays a crucial role',
+    'of great importance',
+  ],
+  // 结构模式
+  structural: [
+    '一方面',
+    '另一方面',
+    '首先',
+    '然后',
+    '接着',
+    '最后',
+    'on one hand',
+    'on the other hand',
+    'not only',
+    'but also',
+  ],
+};
 
 /**
  * 检测 AI 模式
@@ -133,155 +123,178 @@ export interface PatternMatch {
  */
 export function detectAIPatterns(text: string): PatternResult {
   const sentences = splitSentences(text);
-  const sentenceCount = Math.max(sentences.length, 1);
+  const words = getAllWords(text);
+  const detectedPatterns: string[] = [];
+  let totalScore = 0;
 
-  // 检测中文模式
-  const chineseMatches = detectChinesePatterns(text);
+  const lowerText = text.toLowerCase();
 
-  // 检测英文模式
-  const englishMatches = detectEnglishPatterns(text);
-
-  // 检测句式模式
-  const sentenceMatches = detectSentencePatterns(text);
-
-  // 计算总匹配数
-  const totalMatches =
-    chineseMatches.reduce((sum, m) => sum + m.count, 0) +
-    englishMatches.reduce((sum, m) => sum + m.count, 0) +
-    sentenceMatches.reduce((sum, m) => sum + m.count, 0);
-
-  // 计算密度（每句平均匹配数）
-  const density = totalMatches / sentenceCount;
-
-  // 计算分数
-  // 密度 > 2 时，认为是高度 AI 特征
-  // 密度 < 0.5 时，认为是人类特征
-  let score = 0;
-  if (density <= 0.5) {
-    score = density * 40; // 0-20 分
-  } else if (density <= 1.5) {
-    score = 20 + (density - 0.5) * 40; // 20-60 分
-  } else {
-    score = Math.min(60 + (density - 1.5) * 40, 100); // 60-100 分
+  // 1. 检测开头模式
+  for (const pattern of [...AI_PATTERNS.chineseOpeners, ...AI_PATTERNS.englishOpeners]) {
+    const regex = new RegExp(`[。！？.!?]\\s*${pattern}`, 'gi');
+    const matches = text.match(regex);
+    if (matches) {
+      detectedPatterns.push(pattern);
+      totalScore += matches.length * 0.5;
+    }
   }
 
+  // 2. 检测正式词汇
+  for (const pattern of [...AI_PATTERNS.chineseFormal, ...AI_PATTERNS.englishFormal]) {
+    const count = (lowerText.match(new RegExp(pattern, 'gi')) || []).length;
+    if (count > 0) {
+      detectedPatterns.push(pattern);
+      totalScore += count * 0.3;
+    }
+  }
+
+  // 3. 检测结构模式
+  for (const pattern of AI_PATTERNS.structural) {
+    const count = (lowerText.match(new RegExp(pattern, 'gi')) || []).length;
+    if (count > 0) {
+      detectedPatterns.push(pattern);
+      totalScore += count * 0.4;
+    }
+  }
+
+  // 4. 检测重复开头模式
+  const startPatterns = new Map<string, number>();
+  for (const sentence of sentences) {
+    const start = sentence.slice(0, 3).trim();
+    if (start) {
+      startPatterns.set(start, (startPatterns.get(start) || 0) + 1);
+    }
+  }
+  for (const [pattern, count] of startPatterns) {
+    if (count >= 2) {
+      totalScore += count * 0.3;
+    }
+  }
+
+  // 5. 检测过度使用连接词
+  const freq = getWordFrequency(words);
+  const connectorWords = [
+    '和',
+    '与',
+    '或',
+    '以及',
+    '还有',
+    '并且',
+    '而且',
+    '但是',
+    '然而',
+    'and',
+    'or',
+    'but',
+    'however',
+  ];
+  let connectorCount = 0;
+  for (const word of connectorWords) {
+    connectorCount += freq.get(word) || 0;
+  }
+  const connectorRatio = words.length > 0 ? connectorCount / words.length : 0;
+  if (connectorRatio > 0.15) {
+    totalScore += connectorRatio * 2;
+  }
+
+  // 6. 检测重复句式结构（AI 常见特征）
+  const structureScore = detectRepetitiveStructure(sentences);
+  totalScore += structureScore;
+
+  // 7. 检测重复开头词
+  const repetitiveStartScore = detectRepetitiveStart(sentences);
+  totalScore += repetitiveStartScore;
+
+  // 计算密度（每句平均匹配数）
+  const density = sentences.length > 0 ? totalScore / sentences.length : 0;
+
   return {
-    totalScore: Math.round(score),
-    chineseMatches,
-    englishMatches,
-    sentenceMatches,
-    density: Math.round(density * 100) / 100,
+    density,
+    patterns: [...new Set(detectedPatterns)],
+    score: totalScore,
   };
 }
 
 /**
- * 检测中文模式
+ * 检测重复句式结构
+ * AI 文本常有相似的句子结构，如"X是Y。X是Z。"
  */
-function detectChinesePatterns(text: string): PatternMatch[] {
-  const matches: PatternMatch[] = [];
+function detectRepetitiveStructure(sentences: string[]): number {
+  if (sentences.length < 3) return 0;
 
-  for (const [category, patterns] of Object.entries(CHINESE_PATTERNS)) {
-    for (const pattern of patterns) {
-      const regex = new RegExp(pattern, 'g');
-      const occurrences: number[] = [];
-      let match;
-
-      while ((match = regex.exec(text)) !== null) {
-        occurrences.push(match.index);
-      }
-
-      if (occurrences.length > 0) {
-        matches.push({
-          pattern,
-          category,
-          count: occurrences.length,
-          positions: occurrences,
-        });
-      }
+  // 提取每个句子的开头模式（前几个字）
+  const startPatterns: string[] = [];
+  for (const sentence of sentences) {
+    const trimmed = sentence.trim();
+    // 提取前 4-6 个字符作为结构模式
+    const start = trimmed.slice(0, Math.min(6, trimmed.length));
+    if (start.length >= 3) {
+      startPatterns.push(start);
     }
   }
 
-  return matches;
-}
+  // 统计相似开头的数量
+  let repetitiveCount = 0;
+  const patternCounts = new Map<string, number>();
 
-/**
- * 检测英文模式
- */
-function detectEnglishPatterns(text: string): PatternMatch[] {
-  const matches: PatternMatch[] = [];
-  const lowerText = text.toLowerCase();
+  for (const pattern of startPatterns) {
+    // 简化模式：只保留前 3 个字符
+    const simplified = pattern.slice(0, 3);
+    patternCounts.set(simplified, (patternCounts.get(simplified) || 0) + 1);
+  }
 
-  for (const [category, patterns] of Object.entries(ENGLISH_PATTERNS)) {
-    for (const pattern of patterns) {
-      const regex = new RegExp(pattern.replace(/\./g, '\\.'), 'gi');
-      const occurrences: number[] = [];
-      let match;
-
-      while ((match = regex.exec(lowerText)) !== null) {
-        occurrences.push(match.index);
-      }
-
-      if (occurrences.length > 0) {
-        matches.push({
-          pattern,
-          category,
-          count: occurrences.length,
-          positions: occurrences,
-        });
-      }
+  for (const [_, count] of patternCounts) {
+    if (count >= 2) {
+      repetitiveCount += count - 1; // 重复次数
     }
   }
 
-  return matches;
+  // 返回分数
+  return repetitiveCount * 0.4;
 }
 
 /**
- * 检测句式模式
+ * 检测重复开头词
+ * AI 文本常有重复的主语或开头词
  */
-function detectSentencePatterns(text: string): PatternMatch[] {
-  const matches: PatternMatch[] = [];
+function detectRepetitiveStart(sentences: string[]): number {
+  if (sentences.length < 3) return 0;
 
-  for (const pattern of SENTENCE_PATTERNS) {
-    const occurrences: number[] = [];
-    let match;
-
-    while ((match = pattern.exec(text)) !== null) {
-      occurrences.push(match.index);
-    }
-
-    if (occurrences.length > 0) {
-      matches.push({
-        pattern: pattern.source.substring(0, 30) + '...',
-        category: 'sentence_pattern',
-        count: occurrences.length,
-        positions: occurrences,
-      });
+  // 提取每个句子的第一个词
+  const firstWords: string[] = [];
+  for (const sentence of sentences) {
+    const match = sentence.trim().match(/^[\u4e00-\u9fa5]+|[a-zA-Z]+/);
+    if (match) {
+      firstWords.push(match[0].toLowerCase());
     }
   }
 
-  return matches;
+  // 统计重复
+  const wordCounts = new Map<string, number>();
+  for (const word of firstWords) {
+    wordCounts.set(word, (wordCounts.get(word) || 0) + 1);
+  }
+
+  let score = 0;
+  for (const [word, count] of wordCounts) {
+    if (count >= 2 && word.length >= 2) {
+      score += (count - 1) * 0.5;
+    }
+  }
+
+  return score;
 }
 
 /**
- * 获取模式统计摘要
+ * 获取模式摘要
+ * @param result 模式检测结果
+ * @returns 摘要字符串
  */
 export function getPatternSummary(result: PatternResult): string {
-  const totalMatches =
-    result.chineseMatches.reduce((sum, m) => sum + m.count, 0) +
-    result.englishMatches.reduce((sum, m) => sum + m.count, 0) +
-    result.sentenceMatches.reduce((sum, m) => sum + m.count, 0);
+  if (result.patterns.length === 0) {
+    return 'No AI patterns detected';
+  }
 
-  const topChinese = result.chineseMatches
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 3)
-    .map(m => `${m.pattern}(${m.count})`)
-    .join(', ');
-
-  const topEnglish = result.englishMatches
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 3)
-    .map(m => `${m.pattern}(${m.count})`)
-    .join(', ');
-
-  return `AI模式检测: 共发现 ${totalMatches} 个匹配，密度 ${result.density}/句。`;
+  const topPatterns = result.patterns.slice(0, 5);
+  return `Detected ${result.patterns.length} patterns: ${topPatterns.join(', ')}${result.patterns.length > 5 ? '...' : ''}`;
 }

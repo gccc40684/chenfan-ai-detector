@@ -27,7 +27,8 @@ export function tokenize(text: string): Token[] {
   let position = 0;
 
   // 使用正则表达式匹配不同类型的 token
-  const regex = /[\u4e00-\u9fa5]|[a-zA-Z]+(?:[''-][a-zA-Z]+)*|\d+(?:\.\d+)?|[\s\n\r]+|[。！？；.!?,:，、""''（）()【】\[\]]|./g;
+  const regex =
+    /[\u4e00-\u9fa5]|[a-zA-Z]+(?:[''-][a-zA-Z]+)*|\d+(?:\.\d+)?|[\s\n\r]+|[。！？；.!?,:，、""''（）()【】\[\]]|./g;
 
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -91,9 +92,7 @@ function getTokenType(text: string): Token['type'] | 'whitespace' {
  */
 export function tokenizeChinese(text: string): string[] {
   const tokens = tokenize(text);
-  return tokens
-    .filter(t => t.type === 'chinese')
-    .map(t => t.text);
+  return tokens.filter(t => t.type === 'chinese').map(t => t.text);
 }
 
 /**
@@ -103,9 +102,7 @@ export function tokenizeChinese(text: string): string[] {
  */
 export function tokenizeEnglish(text: string): string[] {
   const tokens = tokenize(text);
-  return tokens
-    .filter(t => t.type === 'english')
-    .map(t => t.text.toLowerCase());
+  return tokens.filter(t => t.type === 'english').map(t => t.text.toLowerCase());
 }
 
 /**
@@ -117,7 +114,7 @@ export function getAllWords(text: string): string[] {
   const tokens = tokenize(text);
   return tokens
     .filter(t => t.type === 'chinese' || t.type === 'english')
-    .map(t => t.type === 'english' ? t.text.toLowerCase() : t.text);
+    .map(t => (t.type === 'english' ? t.text.toLowerCase() : t.text));
 }
 
 /**

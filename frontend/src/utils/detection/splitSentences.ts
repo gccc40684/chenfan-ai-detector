@@ -18,28 +18,33 @@ export function splitSentences(text: string): string[] {
   // 清理文本：统一换行符为空格
   const cleaned = text.replace(/[\n\r]+/g, ' ').trim();
 
-  // 定义句子结束标记
-  // 中文：。！？；
-  // 英文：.!?
-  // 注意：处理缩写如 Dr. Mr. Mrs. 等
-  const sentenceEndRegex = /([。！？；.!?])(?=\s*[""''】\]\)|\s|$)|([。！？；.!?])(?=[""''】\]\)]*\s*)/g;
-
   // 先保护常见的缩写
   const protectedText = protectAbbreviations(cleaned);
 
-  // 分割句子
-  const parts = protectedText.split(sentenceEndRegex).filter(Boolean);
-
-  // 重建句子
+  // 使用正则表达式匹配句子
+  // 匹配规则：以句子结束标记结尾，后面跟着空格或结束
   const sentences: string[] = [];
   let currentSentence = '';
 
-  for (let i = 0; i < parts.length; i++) {
-    const part = parts[i];
-    currentSentence += part;
+  for (let i = 0; i < protectedText.length; i++) {
+    const char = protectedText[i];
+    currentSentence += char;
 
-    // 检查是否是结束标记
-    if (/^[。！？；.!?]$/.test(part)) {
+    // 检查是否是句子结束标记
+    if (/[。！？；.!?]/.test(char)) {
+      // 中文标点总是分割
+      const isChinesePunctuation = /[。！？；]/.test(char);
+
+      if (!isChinesePunctuation) {
+        // 英文标点需要检查是否是缩写中的句点
+        const nextChar = protectedText[i + 1];
+        // 如果下一个字符是字母，可能是缩写，继续
+        if (nextChar && /[a-zA-Z]/.test(nextChar)) {
+          continue;
+        }
+      }
+
+      // 这是一个句子结束
       const restored = restoreAbbreviations(currentSentence.trim());
       if (restored.length > 0) {
         sentences.push(restored);
@@ -57,9 +62,7 @@ export function splitSentences(text: string): string[] {
   }
 
   // 过滤空句子和清理
-  return sentences
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
+  return sentences.map(s => s.trim()).filter(s => s.length > 0);
 }
 
 /**
@@ -67,12 +70,37 @@ export function splitSentences(text: string): string[] {
  */
 function protectAbbreviations(text: string): string {
   const abbreviations = [
-    'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Prof.',
-    'Jr.', 'Sr.', 'St.',
-    'vs.', 'etc.', 'i.e.', 'e.g.',
-    'a.m.', 'p.m.', 'A.M.', 'P.M.',
-    'Inc.', 'Ltd.', 'Corp.',
-    'Jan.', 'Feb.', 'Mar.', 'Apr.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Sept.', 'Oct.', 'Nov.', 'Dec.',
+    'Mr.',
+    'Mrs.',
+    'Ms.',
+    'Dr.',
+    'Prof.',
+    'Jr.',
+    'Sr.',
+    'St.',
+    'vs.',
+    'etc.',
+    'i.e.',
+    'e.g.',
+    'a.m.',
+    'p.m.',
+    'A.M.',
+    'P.M.',
+    'Inc.',
+    'Ltd.',
+    'Corp.',
+    'Jan.',
+    'Feb.',
+    'Mar.',
+    'Apr.',
+    'Jun.',
+    'Jul.',
+    'Aug.',
+    'Sep.',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Dec.',
   ];
 
   let protectedText = text;
@@ -89,12 +117,37 @@ function protectAbbreviations(text: string): string {
  */
 function restoreAbbreviations(text: string): string {
   const abbreviations = [
-    'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Prof.',
-    'Jr.', 'Sr.', 'St.',
-    'vs.', 'etc.', 'i.e.', 'e.g.',
-    'a.m.', 'p.m.', 'A.M.', 'P.M.',
-    'Inc.', 'Ltd.', 'Corp.',
-    'Jan.', 'Feb.', 'Mar.', 'Apr.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Sept.', 'Oct.', 'Nov.', 'Dec.',
+    'Mr.',
+    'Mrs.',
+    'Ms.',
+    'Dr.',
+    'Prof.',
+    'Jr.',
+    'Sr.',
+    'St.',
+    'vs.',
+    'etc.',
+    'i.e.',
+    'e.g.',
+    'a.m.',
+    'p.m.',
+    'A.M.',
+    'P.M.',
+    'Inc.',
+    'Ltd.',
+    'Corp.',
+    'Jan.',
+    'Feb.',
+    'Mar.',
+    'Apr.',
+    'Jun.',
+    'Jul.',
+    'Aug.',
+    'Sep.',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Dec.',
   ];
 
   let restoredText = text;

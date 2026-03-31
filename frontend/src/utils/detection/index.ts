@@ -14,7 +14,11 @@ export {
   getTotalWordCount,
   type Token,
 } from './tokenize';
-export { calculateBurstiness, analyzeBurstiness, type BurstinessResult } from './calculateBurstiness';
+export {
+  calculateBurstiness,
+  analyzeBurstiness,
+  type BurstinessResult,
+} from './calculateBurstiness';
 export {
   calculateTTR,
   calculateRTTR,
@@ -25,6 +29,12 @@ export {
   analyzeDiversity,
   type DiversityResult,
 } from './calculateDiversity';
+export {
+  detectAIPatterns,
+  getPatternSummary,
+  type PatternResult,
+  type PatternMatch,
+} from './detectAIPatterns';
 export {
   detectAI,
   batchDetect,
